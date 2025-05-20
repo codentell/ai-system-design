@@ -1,10 +1,12 @@
 import os
 import redis
-from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
 
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 redis_client = redis.Redis.from_url(REDIS_URL)
+
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 app = FastAPI(
     title="Token Rate Limiter",
@@ -20,7 +22,7 @@ class ChatRequest(BaseModel):
 def main():
     return {"message": "Token rate limiter and chat simulator"}
 
-@app.post("/chat")
+@app.post("/v1/chat/completions")
 def chat(request: ChatRequest):
     return {"message": "Chat request received"}
 
